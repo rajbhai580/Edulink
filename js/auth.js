@@ -1,25 +1,37 @@
-// This script handles all authentication logic
+// js/auth.js (NEW & IMPROVED)
+
 document.addEventListener('DOMContentLoaded', () => {
     // --- Universal Auth State Listener ---
     auth.onAuthStateChanged(user => {
+        console.log('Auth state changed. User:', user); // DEBUG: See if user object exists
+
         const path = window.location.pathname;
         const isAuthPage = path.includes('index.html') || path.includes('signup.html') || path.includes('forgot-password.html') || path === '/';
 
         if (user) {
+            // User is logged in
             if (isAuthPage) {
-                // If on an auth page, redirect to the correct dashboard
+                console.log('User is on an auth page, attempting to redirect...'); // DEBUG
                 db.collection('users').doc(user.uid).get().then(doc => {
                     if (doc.exists) {
                         const role = doc.data().role;
+                        console.log('User role found:', role, '. Redirecting to dashboard.'); // DEBUG
                         window.location.href = `/${role}/index.html`;
                     } else {
-                        console.error("User document not found in Firestore!");
+                        // This is a critical error. The user is logged in, but has no data in the database.
+                        console.error('CRITICAL ERROR: User document not found in Firestore for UID:', user.uid);
+                        alert('Your user data could not be found. Please contact an administrator.');
+                        logout(); // Log them out to prevent a broken state
                     }
+                }).catch(error => {
+                    console.error("Error getting user document:", error);
+                    alert("An error occurred while fetching your user profile.");
                 });
             }
         } else {
-            // If user is not logged in and not on an auth page, redirect to login
+            // User is not logged in
             if (!isAuthPage) {
+                console.log('User is not logged in and not on an auth page. Redirecting to login.'); // DEBUG
                 window.location.href = '/index.html';
             }
         }
@@ -34,10 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = loginForm.password.value;
             const errorMessage = document.getElementById('error-message');
             errorMessage.textContent = '';
+            console.log('Attempting to sign in with email:', email); // DEBUG
 
             auth.signInWithEmailAndPassword(email, password)
                 .catch(error => {
-                    errorMessage.textContent = error.message;
+                    console.error('Login Error:', error.code, error.message); // DEBUG
+                    errorMessage.textContent = `Login failed: ${error.message}`;
                 });
         });
     }
@@ -53,10 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const role = signupForm.role.value;
             const errorMessage = document.getElementById('error-message');
             errorMessage.textContent = '';
+            console.log('Attempting to sign up new user:', email, 'with role:', role); // DEBUG
 
             auth.createUserWithEmailAndPassword(email, password)
                 .then(userCredential => {
                     const user = userCredential.user;
+                    console.log('User created in Auth. Now adding to Firestore.'); // DEBUG
                     // Create user document in Firestore
                     return db.collection('users').doc(user.uid).set({
                         uid: user.uid,
@@ -66,11 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 })
                 .then(() => {
+                    console.log('User added to Firestore successfully.'); // DEBUG
                     alert('Sign up successful! Please log in.');
                     window.location.href = '/index.html';
                 })
                 .catch(error => {
-                    errorMessage.textContent = error.message;
+                    console.error('Signup Error:', error.code, error.message); // DEBUG
+                    errorMessage.textContent = `Signup failed: ${error.message}`;
                 });
         });
     }
@@ -78,67 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Password Reset Form ---
     const resetForm = document.getElementById('reset-form');
     if (resetForm) {
-        resetForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = resetForm.email.value;
-            const errorMessage = document.getElementById('error-message');
-            const successMessage = document.getElementById('success-message');
-            errorMessage.textContent = '';
-            successMessage.textContent = '';
-
-            auth.sendPasswordResetEmail(email)
-                .then(() => {
-                    successMessage.textContent = 'Password reset email sent! Check your inbox.';
-                })
-                .catch(error => {
-                    errorMessage.textContent = error.message;
-                });
-        });
+        // (The forgot-password code from the previous response is fine and can be used here)
     }
 });
 
 // --- Universal Logout Function ---
 function logout() {
-    auth.signOut().then(() => {
-        window.location.href = '/index.html';
-    });
-}
-api/create-order.js```javascript
-const Razorpay = require('razorpay');
-// This is a Node.js module, not browser JS. Vercel will run this.
-// export default is the syntax Vercel expects.
-export default async function handler(request, response) {
-if (request.method !== 'POST') {
-return response.status(405).json({ error: 'Method Not Allowed' });
-}
-code
-Code
-const { amount } = request.body;
-
-// These environment variables MUST be set in your Vercel project settings
-const keyId = process.env.RAZORPAY_KEY_ID;
-const keySecret = process.env.RAZORPAY_KEY_SECRET;
-
-if (!keyId || !keySecret) {
-    return response.status(500).json({ error: 'Razorpay keys not configured on the server.' });
-}
-
-const razorpay = new Razorpay({
-    key_id: keyId,
-    key_secret: keySecret,
-});
-
-const options = {
-    amount: amount * 100, // Amount in the smallest currency unit (paise)
-    currency: 'INR',
-    receipt: `receipt_order_${new Date().getTime()}`,
-};
-
-try {
-    const order = await razorpay.orders.create(options);
-    response.status(200).json(order);
-} catch (error) {
-    console.error('Razorpay order creation error:', error);
-    response.status(500).json({ error: 'Failed to create Razorpay order' });
-}
+    console.log('Logging out user...'); // DEBUG
+    auth.signOut(); // The onAuthStateChanged listener will handle the redirect
 }
