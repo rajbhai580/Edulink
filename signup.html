@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - School App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h1>Create Account</h1>
+        <form id="signup-form">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" required>
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" required>
+
+            <label for="role">I am a...</label>
+            <select id="role">
+                <option value="student">Student/Parent</option>
+                <option value="teacher">Teacher</option>
+            </select>
+            
+            <div id="error-message" class="error-message"></div>
+            
+            <button type="submit">Sign Up</button>
+        </form>
+        <p class="auth-link">Already have an account? <a href="/index.html">Login</a></p>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.10.0/firebase-firestore-compat.js"></script>
+    <script src="/js/firebase-config.js"></script>
+    <script src="/js/auth.js"></script>
+</body>
+</html>
