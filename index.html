@@ -17,7 +17,7 @@
     
     /* Header / Hero Section */
     header{background:linear-gradient(135deg,#2b5876,#4e4376);color:#fff;text-align:center;padding:80px 20px;position:relative;overflow:hidden;}
-    header img{width:120px;margin-bottom:20px;}
+    header img{width:140px;margin-bottom:20px;border-radius:20px;}
     header h1{font-size:2.5rem;margin-bottom:15px;}
     header p{font-size:1.2rem;margin-bottom:30px;}
     
@@ -41,6 +41,10 @@
     .screenshots img{width:250px;border-radius:20px;box-shadow:0 6px 20px rgba(0,0,0,0.3);scroll-snap-align:center;transition:transform .3s;}
     .screenshots img:hover{transform:scale(1.08);}
 
+    /* QR Code Section */
+    .qr-section{margin-top:50px;}
+    .qr-section img{width:200px;margin-top:20px;box-shadow:0 4px 15px rgba(0,0,0,0.2);border-radius:15px;padding:10px;background:#fff;}
+
     /* Floating Download Button */
     .floating-btn{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,#ff5722,#ff9800);color:#fff;padding:15px 25px;border-radius:40px;text-decoration:none;font-weight:600;box-shadow:0 6px 15px rgba(0,0,0,0.3);transition:.3s;z-index:1000;}
     .floating-btn:hover{transform:scale(1.1);}
@@ -54,7 +58,7 @@
 
   <!-- Hero Section -->
   <header data-aos="fade-up">
-    <img src="https://i.ibb.co/p6rmfKmC/Untitled-design-11.png" alt="App Logo"> <!-- 🔥 Replace with your logo -->
+    <img src="https://i.ibb.co/p6rmfKmC/Untitled-design-11.png" alt="App Logo"> <!-- ✅ Your logo -->
     <h1 data-aos="fade-down" data-aos-delay="200">Raj Customer Service Point</h1>
     <p data-aos="zoom-in" data-aos-delay="400">One Stop Shop for All Mobile Accessories & Services</p>
     <a href="https://drive.google.com/uc?id=1Nz3ZW8f3aw3g63Q7izpfUdQk6o584u72" class="btn" data-aos="fade-up" data-aos-delay="600">Download APK</a>
@@ -94,6 +98,13 @@
       <img src="https://i.ibb.co/7dHFrphs/Screenshot-2025-10-03-203342.png" alt="Orders">
       <img src="https://i.ibb.co/4bsZ98P/Screenshot-2025-10-03-203354.png" alt="Profile">
     </div>
+  </section>
+
+  <!-- QR Code Section -->
+  <section class="qr-section" data-aos="zoom-in">
+    <h2>Scan & Download</h2>
+    <p>Just scan the QR code below on your phone to download instantly.</p>
+    <img src="https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=https://drive.google.com/uc?id=1Nz3ZW8f3aw3g63Q7izpfUdQk6o584u72" alt="QR Code to Download APK">
   </section>
 
   <!-- Call To Action -->
